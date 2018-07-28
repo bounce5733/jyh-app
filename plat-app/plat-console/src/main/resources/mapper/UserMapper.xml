@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jyh.app.plat.console.dao.UserMapper">
+	
+	<select id="roleUsers" resultType="com.jyh.entity.plat.console.User">
+	SELECT u.id,u.account,u.name FROM sys_user u LEFT JOIN sys_role_user ru ON
+	u.id = ru.user_id WHERE ru.role_id = #{roleid}
+	</select>
+	
+</mapper>

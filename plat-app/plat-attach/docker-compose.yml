@@ -1,0 +1,18 @@
+version: '2'
+
+services: 
+  plat-attach: 
+    image: jyh-test/plat-attach
+    restart: always
+    ports: 
+      - "8314:8314"
+      - "28314:28314"
+    logging:
+      driver: fluentd
+      options: 
+        tag: "docker.{{.ID}}"
+        fluentd-address: "10.88.20.15:24224"
+    environment: 
+      - SPRING_PROFILES_ACTIVE=dev
+      - DUBBO_IP_TO_REGISTRY=10.88.20.89
+      - DUBBO_PORT_TO_REGISTRY=28314

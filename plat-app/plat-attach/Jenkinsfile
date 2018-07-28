@@ -1,0 +1,111 @@
+ pipeline {
+
+    agent none
+
+     stages {
+
+        stage('Checkout') {     
+            
+            agent {
+                label 'test_89'
+            }
+
+            steps {
+
+                echo 'start to check from svn server'
+
+                checkout([$class: 'SubversionSCM', 
+                        additionalCredentials: [], 
+                        excludedCommitMessages: '', 
+                        excludedRegions: '', 
+                        excludedRevprop: '', 
+                        excludedUsers: '', 
+                        filterChangelog: false, 
+                        ignoreDirPropChanges: false, 
+                        includedRegions: '', 
+                        locations: [[credentialsId: 'svn_216', depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: 'svn://100.100.20.216/aux-repo/jyh/jyh-plat/plat-attach']], workspaceUpdater: [$class: 'UpdateUpdater']])
+
+            }        
+        }     
+
+        stage('mvn build'){
+
+            agent {
+                label 'test_89'
+            }
+
+            steps {
+
+                 echo 'start to mvn build'
+
+                 sh "docker run -i --rm -v ${env.WORKSPACE}:/usr/src/workspace -v /root/.m2/repository/:/root/.m2/repository -v /opt/maven/settings.xml:/root/.m2/settings.xml -w /usr/src/workspace maven mvn clean package -U -Dmaven.test.skip=true"
+
+            }
+        }
+        
+        stage('clear before images'){
+
+            agent {
+                label 'test_89'
+            }
+            
+            steps {
+
+                echo 'clear before images'
+                
+                sh '''CIDS=$(docker ps -a | grep jyh-test/$JOB_NAME | awk '{print $1}')
+                    for CID in $CIDS
+                    do
+                      {
+                        docker rm -f $CID
+                      } || {
+                        echo 'remove ' $CID 'error'
+                      }
+                    done
+                    
+                    DIDS=$(docker images | grep jyh-test/$JOB_NAME | awk '{print $3}')
+                    for DID in $DIDS
+                    do
+                      {
+                        docker rmi $DID
+                      } || {
+                        echo 'remove' $DID 'error'
+                      }
+                    done'''
+                
+            }
+        }
+
+        stage('build'){
+
+            agent {
+                label 'test_89'
+            }
+
+            steps {
+
+                echo 'build image'
+
+                script {
+
+                    docker.build('jyh-test/$JOB_NAME')
+                }    
+            }
+        }
+        
+        stage('start image'){
+
+            agent {
+                label 'test_89'
+            }
+            
+            steps {
+
+                echo 'start image'
+                
+                sh "docker-compose -f docker-compose.yml up -d"
+                
+            }
+        }
+    }
+ }
