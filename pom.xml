@@ -1,191 +1,53 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.jyh.app</groupId>
-		<artifactId>jyh-app</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</parent>
+	<groupId>com.jyh.app</groupId>
 	<artifactId>jyh-app</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.jyh.util</groupId>
-			<artifactId>common-util</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.0.0.RELEASE</version>
+	</parent>
 
-		<dependency>
-			<groupId>com.jyh.util</groupId>
-			<artifactId>conf-util</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jdk.version>1.8</jdk.version>
+	</properties>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<url>http://192.168.3.8:8081/repository/maven-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<url>http://192.168.3.8:8081/repository/maven-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-redis</artifactId>
-		</dependency>
+	<build>
+		<finalName>${project.artifactId}</finalName>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-amqp</artifactId>
-		</dependency>
+		<plugins>
 
-		<dependency>
-			<groupId>org.springframework.session</groupId>
-			<artifactId>spring-session-data-redis</artifactId>
-		</dependency>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+					<showWarnings>true</showWarnings>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
 
-		<!--常用库依赖 -->
-		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>24.1-jre</version>
-		</dependency>
-
-		<!--MyBatis 及 插件依赖 -->
-		<dependency>
-			<groupId>org.mybatis</groupId>
-			<artifactId>mybatis-spring</artifactId>
-			<version>1.3.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.mybatis</groupId>
-			<artifactId>mybatis</artifactId>
-			<version>3.4.6</version>
-		</dependency>
-		<dependency>
-			<groupId>tk.mybatis</groupId>
-			<artifactId>mapper</artifactId>
-			<version>4.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.github.pagehelper</groupId>
-			<artifactId>pagehelper</artifactId>
-			<version>5.1.3</version>
-		</dependency>
-
-		<!--阿里 FastJson依赖 -->
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-			<version>1.2.47</version>
-		</dependency>
-
-		<!--阿里 Druid Spring Boot Starter依赖 -->
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>druid-spring-boot-starter</artifactId>
-			<version>1.1.9</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jdbc</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>dubbo</artifactId>
-			<version>2.6.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.zookeeper</groupId>
-			<artifactId>zookeeper</artifactId>
-			<version>3.4.11</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.github.sgroschupf</groupId>
-			<artifactId>zkclient</artifactId>
-			<version>0.1</version>
-		</dependency>
-
-	</dependencies>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>com.jyh.app</groupId>
-				<artifactId>plat-common</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.jyh.api</groupId>
-				<artifactId>plat-console-api</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.jyh.api</groupId>
-				<artifactId>plat-service-api</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.jyh.entity</groupId>
-				<artifactId>plat-console-entity</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.jyh.entity</groupId>
-				<artifactId>plat-service-entity</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.jyh.entity</groupId>
-				<artifactId>plat-attach-entity</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework.kafka</groupId>
-				<artifactId>spring-kafka</artifactId>
-				<version>2.1.4.RELEASE</version>
-			</dependency>
-
-			<dependency>
-				<groupId>net.oschina.zcx7878</groupId>
-				<artifactId>fastdfs-client-java</artifactId>
-				<version>1.27.0.0</version>
-			</dependency>
-
-		</dependencies>
-	</dependencyManagement>
+		</plugins>
+	</build>
 
 	<modules>
-		<module>plat-service</module>
-		<module>plat-console</module>
-		<module>plat-attach</module>
-		<module>plat-common</module>
+		<module>plat-app</module>
 	</modules>
 </project>
