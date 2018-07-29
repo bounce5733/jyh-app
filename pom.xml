@@ -6,7 +6,7 @@
 		<artifactId>jyh-app</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>plat-app</artifactId>
+	<artifactId>jyh-app</artifactId>
 	<packaging>pom</packaging>
 
 	<dependencies>
