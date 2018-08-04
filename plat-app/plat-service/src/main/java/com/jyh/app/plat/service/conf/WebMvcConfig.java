@@ -28,7 +28,6 @@ import com.jyh.app.plat.service.AppConst;
 public class WebMvcConfig implements WebMvcConfigurer {
 
 	// 使用阿里 FastJson 作为JSON MessageConverter
-	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 		FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
 		FastJsonConfig config = new FastJsonConfig();
@@ -41,7 +40,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	}
 
 	// 解决跨域问题
-	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**").allowedOrigins("*")
 				.allowedMethods("GET", "HEAD", "POST", "PUT", "DELETE", "TRACE", "OPTIONS", "PATCH")
@@ -51,7 +49,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	}
 
 	// 添加拦截器
-	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(new HandlerInterceptorAdapter() {
 			@Override

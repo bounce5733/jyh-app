@@ -3,6 +3,7 @@ package com.jyh.app.plat.service.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,56 +72,70 @@ public class AppServiceImpl implements AppService {
 		template.flush();
 	}
 
-	@Override
 	@Cacheable("aux_platform_app_apptree")
 	public Map<String, AppEntity> loadApp() {
 		log.info("缓存应用...");
 		APP_CACHE_MAP.clear();
 		List<AppEntity> apps = appMapper.selectAll();
-		List<ServiceEntity> services = serviceMapper.selectAll();
-		List<ApiEntity> apis = apiMapper.selectAll();
-		apps.forEach(app -> {
-			services.forEach(service -> {
-				if (service.getAppId().equals(app.getId())) {
-					app.getServices().add(service);
-					apis.forEach(api -> {
-						if (api.getServiceId().equals(service.getId())) {
-							service.getApis().add(api);
+		final List<ServiceEntity> services = serviceMapper.selectAll();
+		final List<ApiEntity> apis = apiMapper.selectAll();
+		apps.forEach(new Consumer<AppEntity>() {
+			public void accept(final AppEntity app) {
+				services.forEach(new Consumer<ServiceEntity>() {
+					public void accept(final ServiceEntity service) {
+						if (service.getAppId().equals(app.getId())) {
+							app.getServices().add(service);
+							apis.forEach(new Consumer<ApiEntity>() {
+								public void accept(ApiEntity api) {
+									if (api.getServiceId().equals(service.getId())) {
+										service.getApis().add(api);
+									}
+								}
+							});
 						}
-					});
-				}
-			});
-			APP_CACHE_MAP.put(app.getAppid(), app);
+					}
+				});
+				APP_CACHE_MAP.put(app.getAppid(), app);
+			}
 		});
 		log.info("完成缓存应用...");
 		return APP_CACHE_MAP;
 	}
 
-	@Override
 	public List<AppTypeEntity> loadTree() {
 		List<AppTypeEntity> apptypes = appTypeMapper.select(new AppTypeEntity());
-		List<AppEntity> apps = appMapper.selectAll();
-		List<ServiceEntity> services = serviceMapper.selectAll();
-		List<ApiEntity> apis = apiMapper.selectAll();
-		apps.forEach(app -> {
-			services.forEach(service -> {
-				if (service.getAppId().equals(app.getId())) {
-					app.getServices().add(service);
-					apis.forEach(api -> {
-						if (api.getServiceId().equals(service.getId())) {
-							service.getApis().add(api);
+		final List<AppEntity> apps = appMapper.selectAll();
+		final List<ServiceEntity> services = serviceMapper.selectAll();
+		final List<ApiEntity> apis = apiMapper.selectAll();
+		apps.forEach(new Consumer<AppEntity>() {
+			public void accept(final AppEntity app) {
+				services.forEach(new Consumer<ServiceEntity>() {
+					public void accept(final ServiceEntity service) {
+						if (service.getAppId().equals(app.getId())) {
+							app.getServices().add(service);
+							apis.forEach(new Consumer<ApiEntity>() {
+								public void accept(ApiEntity api) {
+									if (api.getServiceId().equals(service.getId())) {
+										service.getApis().add(api);
+									}
+								}
+							});
 						}
-					});
-				}
-			});
+					}
+				});
+			}
 		});
 		// 组装树
-		apptypes.forEach(type -> {
-			apps.forEach(app -> {
-				if (type.getId().equals(app.getOwner())) {
-					type.getChildren().add(app);
-				}
-			});
+		apptypes.forEach(new Consumer<AppTypeEntity>() {
+			public void accept(final AppTypeEntity type) {
+				apps.forEach(new Consumer<AppEntity>() {
+					public void accept(AppEntity app) {
+						if (type.getId().equals(app.getOwner())) {
+							type.getChildren().add(app);
+						}
+					}
+				});
+			}
 		});
 		return apptypes;
 	}

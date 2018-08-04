@@ -34,7 +34,6 @@ public class ConfigLoadListener implements ApplicationListener<ApplicationEnviro
 		this.appid = appid;
 	}
 
-	@Override
 	public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
 		log.info("加载应用配置...");
 		YamlPropertySourceLoader yamlLoader = new YamlPropertySourceLoader();

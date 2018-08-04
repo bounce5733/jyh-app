@@ -38,7 +38,7 @@ public class KafkaConfig {
 
 	@Bean
 	public KafkaTemplate<Integer, String> kafkaTemplate() {
-		Map<String, Object> props = new HashMap<>();
+		Map<String, Object> props = new HashMap<String, Object>();
 		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, server);
 		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class);
 		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -47,8 +47,8 @@ public class KafkaConfig {
 
 	@Bean
 	ConcurrentKafkaListenerContainerFactory<Integer, String> kafkaListenerContainerFactory() {
-		ConcurrentKafkaListenerContainerFactory<Integer, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
-		Map<String, Object> props = new HashMap<>();
+		ConcurrentKafkaListenerContainerFactory<Integer, String> factory = new ConcurrentKafkaListenerContainerFactory<Integer, String>();
+		Map<String, Object> props = new HashMap<String, Object>();
 		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, server);
 		props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, IntegerDeserializer.class);
@@ -64,7 +64,7 @@ public class KafkaConfig {
 
 	@Bean
 	public KafkaAdmin admin() {
-		Map<String, Object> configs = new HashMap<>();
+		Map<String, Object> configs = new HashMap<String, Object>();
 		configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, server);
 		return new KafkaAdmin(configs);
 	}

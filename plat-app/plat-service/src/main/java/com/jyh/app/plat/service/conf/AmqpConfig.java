@@ -81,7 +81,6 @@ public class AmqpConfig {
 		template.setMessageConverter(new Jackson2JsonMessageConverter());
 		template.setConfirmCallback(new ConfirmCallback() {
 
-			@Override
 			public void confirm(CorrelationData correlationData, boolean ack, String cause) {
 				log.info("confirm ack:" + ack);
 			}
@@ -90,7 +89,6 @@ public class AmqpConfig {
 
 		template.setRecoveryCallback(new RecoveryCallback<Object>() {
 
-			@Override
 			public Object recover(RetryContext context) throws Exception {
 				log.info("recover:" + context.toString());
 				return null;
@@ -100,7 +98,6 @@ public class AmqpConfig {
 
 		template.setReturnCallback(new ReturnCallback() {
 
-			@Override
 			public void returnedMessage(Message message, int replyCode, String replyText, String exchange,
 					String routingKey) {
 				log.info("return callback:" + replyCode);

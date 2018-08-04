@@ -40,7 +40,6 @@ public class ConfigServer implements Runnable {
 	@Value("${app.conf.socket.port}")
 	private int port;
 
-	@Override
 	public void run() {
 		try {
 			log.info("开始启动应用配置Socket服务...");
@@ -79,7 +78,6 @@ public class ConfigServer implements Runnable {
 		}
 
 		@SuppressWarnings("unchecked")
-		@Override
 		public void run() {
 			log.debug("收到连接，新建socket线程处理...");
 			ByteArrayOutputStream buffer = null;

@@ -32,7 +32,6 @@ public class MqSender implements ConfirmCallback {
 		rabbitTemplate.convertAndSend(obj);
 	}
 
-	@Override
 	public void confirm(CorrelationData correlationData, boolean ack, String cause) {
 		log.info("确认消息：" + correlationData.getId());
 		if (ack) {
