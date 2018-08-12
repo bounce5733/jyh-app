@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jyh.app.plat.common.SessionConfig;
 import com.jyh.app.plat.console.dao.UserMapper;
 import com.jyh.entity.plat.console.User;
-import com.jyh.util.common.CodeUtil;
 
 /**
  * 系统API
@@ -38,7 +37,7 @@ public class SysRest {
 		User param = new User();
 		param.setAccount(userMap.get("account"));
 		User user = userMapper.selectOne(param);
-		if (user == null || !CodeUtil.md5Encode(userMap.get("pwd").trim()).equals(user.getPwd())) {
+		if (user == null || !userMap.get("pwd").equals(user.getPwd())) {
 			return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
 		}
 
