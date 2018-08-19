@@ -81,7 +81,7 @@ public class CodeRest {
 	}
 
 	@PostMapping
-	@CacheEvict(value = { "plat_console_codes", "plat_console_code_path_map" })
+	@CacheEvict(value = { "plat_console_codes", "plat_console_code_path_map" }, allEntries=true)
 	public ResponseEntity<Object> addCode(@RequestBody Code code, HttpSession session) {
 		code.setCreatedBy(String.valueOf(session.getAttribute(SessionConfig.USER_ACCOUNT_KEY)));
 		code.setCreatedTime(TimeUtil.getTime());
@@ -90,14 +90,14 @@ public class CodeRest {
 	}
 
 	@DeleteMapping("/{code}")
-	@CacheEvict(value = { "plat_console_codes", "plat_console_code_path_map" })
+	@CacheEvict(value = { "plat_console_codes", "plat_console_code_path_map" }, allEntries=true)
 	public ResponseEntity<Object> removeCode(@PathVariable String code) {
 		codeMapper.deleteByPrimaryKey(code);
 		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
 
 	@PostMapping("/item")
-	@CacheEvict(value = { "plat_console_codes", "plat_console_code_path_map" })
+	@CacheEvict(value = { "plat_console_codes", "plat_console_code_path_map" }, allEntries=true)
 	public ResponseEntity<Object> addItem(@RequestBody CodeItem item, HttpServletRequest request) {
 		item.setId(IDGenUtil.UUID());
 		item.setCreatedBy(request.getSession().getAttribute(SessionConfig.USER_ACCOUNT_KEY).toString());
@@ -107,7 +107,7 @@ public class CodeRest {
 	}
 
 	@PatchMapping("/item")
-	@CacheEvict(value = { "plat_console_codes", "plat_console_code_path_map" })
+	@CacheEvict(value = { "plat_console_codes", "plat_console_code_path_map" }, allEntries=true)
 	public ResponseEntity<Object> editItem(@RequestBody CodeItem item, HttpServletRequest request) {
 		item.setUpdatedBy(request.getSession().getAttribute(SessionConfig.USER_ACCOUNT_KEY).toString());
 		item.setUpdatedTime(TimeUtil.getTime());
@@ -116,7 +116,7 @@ public class CodeRest {
 	}
 
 	@DeleteMapping("/item/{id}")
-	@CacheEvict(value = { "plat_console_codes", "plat_console_code_path_map" })
+	@CacheEvict(value = { "plat_console_codes", "plat_console_code_path_map" }, allEntries=true)
 	public ResponseEntity<Object> removeItem(@PathVariable("id") String id) {
 		try {
 			codeItemMapper.deleteByPrimaryKey(id);

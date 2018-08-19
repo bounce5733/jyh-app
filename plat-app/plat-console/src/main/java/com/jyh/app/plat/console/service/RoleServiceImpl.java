@@ -1,5 +1,6 @@
 package com.jyh.app.plat.console.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -64,9 +65,11 @@ public class RoleServiceImpl implements RoleService {
 	 */
 	@Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
 	public void assignMenus(String roleid, List<String> menuids) {
+		// 补充父路径
+		Set<String> fullMenuids = this.makeupLackPmenuid(menuids);
 		// 清除菜单授权
 		roleMapper.clearAssignedMenus(roleid);
-		menuids.forEach(menuid -> {
+		fullMenuids.forEach(menuid -> {
 			roleMapper.assignMenu(IDGenUtil.UUID(), roleid, menuid);
 		});
 	}
@@ -83,5 +86,30 @@ public class RoleServiceImpl implements RoleService {
 		Set<String> uniqueMenuids = new HashSet<String>();
 		uniqueMenuids.addAll(menuids);
 		return uniqueMenuids;
+	}
+
+	/**
+	 * 补充父菜单
+	 * 
+	 * @param menuids
+	 * @return
+	 */
+	private Set<String> makeupLackPmenuid(List<String> menuids) {
+		Set<String> result = new HashSet<String>(menuids);
+		menuids.forEach(menuid -> {
+			String[] menupaths = menuid.split("_");
+			for (int i = 1; i < menupaths.length; i++) {
+				StringBuffer pmenu = new StringBuffer();
+				for (int j = 0; j < i; j++) {
+					pmenu.append(menupaths[j]).append("_");
+				}
+				if (pmenu.length() > 0) {
+					if (!menuids.contains(pmenu.substring(0, pmenu.length() - 1))) {
+						result.add(pmenu.substring(0, pmenu.length() - 1).toString());
+					}
+				}
+			}
+		});
+		return result;
 	}
 }
