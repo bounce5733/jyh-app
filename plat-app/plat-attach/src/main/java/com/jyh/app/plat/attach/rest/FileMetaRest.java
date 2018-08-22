@@ -2,6 +2,7 @@ package com.jyh.app.plat.attach.rest;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jyh.app.plat.attach.dao.FileMetaDao;
 import com.jyh.app.plat.attach.service.FileMetaService;
 import com.jyh.entity.plat.attach.FileMeta;
-import com.jyh.util.common.StringUtil;
 import com.jyh.util.common.TimeUtil;
 
 /**
@@ -51,8 +51,8 @@ public class FileMetaRest {
 	@PostMapping
 	public ResponseEntity<Object> add(@RequestBody FileMeta fileMeta, @RequestAttribute String appid) {
 		try {
-			if (StringUtil.isEmpty(fileMeta.getFileid()) || StringUtil.isEmpty(fileMeta.getFileName())
-					|| StringUtil.isEmpty(fileMeta.getFileExt()) || fileMeta.getFileSize() == 0) {
+			if (StringUtils.isBlank(fileMeta.getFileid()) || StringUtils.isBlank(fileMeta.getFileName())
+					|| StringUtils.isBlank(fileMeta.getFileExt()) || fileMeta.getFileSize() == 0) {
 
 				log.warn("参数不合法[fileid:" + fileMeta.getFileid() + "][fileName:" + fileMeta.getFileName() + "][fileExt:"
 						+ fileMeta.getFileExt() + "][fileExt:" + fileMeta.getFileSize() + "]");

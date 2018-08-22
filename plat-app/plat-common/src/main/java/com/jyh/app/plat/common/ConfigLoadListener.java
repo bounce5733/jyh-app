@@ -3,6 +3,7 @@ package com.jyh.app.plat.common;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
@@ -11,7 +12,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.core.env.PropertySource;
 import org.springframework.core.io.ByteArrayResource;
 
-import com.jyh.util.common.StringUtil;
 import com.jyh.util.conf.ConfClient;
 
 /**
@@ -49,17 +49,17 @@ public class ConfigLoadListener implements ApplicationListener<ApplicationEnviro
 
 				profile = (String) event.getEnvironment().getPropertySources().get("systemEnvironment")
 						.getProperty("SPRING_PROFILES_ACTIVE");
-				if (StringUtil.isEmpty(profile)) {
+				if (StringUtils.isBlank(profile)) {
 					profile = String.valueOf(configs.get(0).getProperty("spring.profiles.active"));
 				}
 
 				event.getEnvironment().getPropertySources()
 						.addLast(yamlLoader.load(appid + "_common", new ByteArrayResource(yamlConf)).get(0));
 
-				if (StringUtil.isNotEmpty(profile) && profile.equalsIgnoreCase(DEV_PROFILES)) {
+				if (StringUtils.isNotBlank(profile) && profile.equalsIgnoreCase(DEV_PROFILES)) {
 					event.getEnvironment().getPropertySources()
 							.addLast(yamlLoader.load(appid + "_" + profile, new ByteArrayResource(yamlConf)).get(1));
-				} else if (StringUtil.isNotEmpty(profile) && profile.equalsIgnoreCase(PROD_PROFILES)) {
+				} else if (StringUtils.isNotBlank(profile) && profile.equalsIgnoreCase(PROD_PROFILES)) {
 					event.getEnvironment().getPropertySources()
 							.addLast(yamlLoader.load(appid + "_" + profile, new ByteArrayResource(yamlConf)).get(2));
 				} else {

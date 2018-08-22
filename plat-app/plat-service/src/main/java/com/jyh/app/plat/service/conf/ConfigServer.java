@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jyh.app.plat.common.SysConst;
 import com.jyh.app.plat.service.dao.AppMapper;
 import com.jyh.entity.plat.service.AppEntity;
-import com.jyh.util.common.StringUtil;
 
 /**
  * 应用配置socket服务端
@@ -111,7 +111,7 @@ public class ConfigServer implements Runnable {
 						return;
 					}
 
-					if (msgMap.get("appid") != null && StringUtil.isNotEmpty(String.valueOf(msgMap.get("appid")))) {
+					if (msgMap.get("appid") != null && StringUtils.isNotBlank(String.valueOf(msgMap.get("appid")))) {
 						String appid = String.valueOf(msgMap.get("appid"));
 						AppEntity param = new AppEntity();
 						param.setAppid(appid);

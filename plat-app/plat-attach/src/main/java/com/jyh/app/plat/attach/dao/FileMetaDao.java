@@ -3,11 +3,11 @@ package com.jyh.app.plat.attach.dao;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import com.jyh.app.plat.common.BaseDao;
 import com.jyh.entity.plat.attach.FileMeta;
-import com.jyh.util.common.StringUtil;
 
 /**
  * 文件元数据
@@ -23,13 +23,13 @@ public class FileMetaDao extends BaseDao<FileMeta> {
 		StringBuffer sql = new StringBuffer(
 				"SELECT fileid,appid,file_name AS fileName,file_ext AS fileExt,file_size AS fileSize,created_time AS createdTime FROM file_meta WHERE 1=1 ");
 
-		if (StringUtil.isNotEmpty(String.valueOf(params.get("fileName")))) {
+		if (StringUtils.isNotBlank(String.valueOf(params.get("fileName")))) {
 			sql.append(" AND file_name like '%" + params.get("fileName") + "%'");
 		}
 
 		int total = template.queryForObject("SELECT COUNT(*) FROM (" + sql.toString() + ") t", Integer.class);
 
-		if (StringUtil.isNotEmpty(orderField) && StringUtil.isNotEmpty(order)) {
+		if (StringUtils.isNotBlank(orderField) && StringUtils.isNotBlank(order)) {
 			order = "ascending".equals(order) ? " ASC" : " DESC";
 			sql.append(" ORDER BY " + orderField + order);
 		}
